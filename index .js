@@ -22,12 +22,33 @@ app.post("/addUser",(req,res)=>{
     members.push({id:uuid.v4(),name,email})
     res.status(200).json(members)
 })
+
 app.delete("/deleteUser/:uid",(req,res)=>{
     const id = parseInt(req.params.uid);
     const found = members.some(member =>member.id === id)
     if(found){
         const result = members.filter(member => member.id !== id)
         res.status(200).json(result);
+
+    }
+    else{
+        res.status(400).json({msg:"user not found"})
+    }
+})
+
+app.put("/updateUser/:uid",(req,res)=>{
+    const id = parseInt(req.params.uid);
+    const found = members.some(member =>member.id === id)
+    if(found){
+        const upMember = req.body
+        members.forEach(member =>{
+            if(member.id === id)
+            {
+                member.name = upMember.name
+                member.email = upMember.email
+            }
+        })
+        res.status(200).json(members)
 
     }
     else{
